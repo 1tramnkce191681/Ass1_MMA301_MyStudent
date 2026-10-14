@@ -58,3 +58,44 @@ export const loadTheme = async () => {
     return null;
   }
 };
+
+const ACTIVITIES_KEY = '@mystudent_activities';
+
+export const saveActivities = async (activities) => {
+  try {
+    const jsonValue = JSON.stringify(activities);
+    await AsyncStorage.setItem(ACTIVITIES_KEY, jsonValue);
+    return true;
+  } catch (error) {
+    console.log('Error saving activities:', error);
+    return false;
+  }
+};
+
+export const loadActivities = async () => {
+  try {
+    const jsonValue = await AsyncStorage.getItem(ACTIVITIES_KEY);
+    if (jsonValue === null) {
+      return null;
+    }
+    try {
+      return JSON.parse(jsonValue);
+    } catch (parseError) {
+      console.log('Invalid activities JSON:', parseError);
+      return null;
+    }
+  } catch (error) {
+    console.log('Error loading activities:', error);
+    return null;
+  }
+};
+
+export const resetAllData = async () => {
+  try {
+    await AsyncStorage.multiRemove([PROFILE_KEY, ACTIVITIES_KEY]);
+    return true;
+  } catch (error) {
+    console.log('Error resetting data:', error);
+    return false;
+  }
+};

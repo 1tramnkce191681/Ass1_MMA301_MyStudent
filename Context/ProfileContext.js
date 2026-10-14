@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { loadProfile, saveProfile } from '../Services/storage';
 
-const defaultProfile = {
+export const defaultProfile = {
   name: 'Nguyen Kim Tram',
   avatar: '👩‍💻',
   major: 'Software Engineering',
@@ -34,9 +34,13 @@ export const ProfileProvider = ({ children }) => {
 
   const updateProfile = async (newProfile) => {
     setProfile(newProfile);
-
     const saved = await saveProfile(newProfile);
+    return saved;
+  };
 
+  const resetProfile = async () => {
+    setProfile(defaultProfile);
+    const saved = await saveProfile(defaultProfile);
     return saved;
   };
 
@@ -45,6 +49,8 @@ export const ProfileProvider = ({ children }) => {
       value={{
         profile,
         updateProfile,
+        resetProfile,
+        defaultProfile,
         isLoading
       }}
     >
